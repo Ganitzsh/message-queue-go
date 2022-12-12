@@ -7,6 +7,11 @@ import (
 	"github.com/ganitzsh/message-queue-go/types"
 )
 
+const (
+	DEFAULT_WORKER_OUTPUT_BUFFER = 100
+	DEFAULT_WORKER_INPUT_BUFFER  = 100
+)
+
 type Worker[T interface{}] struct {
 	sync.Mutex
 	ID            string
@@ -20,13 +25,13 @@ type Worker[T interface{}] struct {
 func NewWorker[T interface{}](ID string, input chan *types.Message[T]) *Worker[T] {
 	finalInput := input
 	if input == nil {
-		finalInput = make(chan *types.Message[T], 200)
+		finalInput = make(chan *types.Message[T], DEFAULT_WORKER_INPUT_BUFFER)
 	}
 
 	return &Worker[T]{
 		ID:            ID,
 		input:         finalInput,
-		output:        make(chan error),
+		output:        make(chan error, DEFAULT_WORKER_OUTPUT_BUFFER),
 		ready:         make(chan bool, 1),
 		started:       false,
 		externalInput: input != nil,
