@@ -1,4 +1,5 @@
 # message-queue-go
+![Coverage](https://img.shields.io/badge/Coverage-100.0%25-brightgreen)
 
 As the name states, it's a message queue in Go.
 
